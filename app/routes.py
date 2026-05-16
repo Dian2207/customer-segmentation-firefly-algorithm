@@ -10,11 +10,22 @@ def home():
 
 @main.route('/eda')
 def eda():
-    eda_data = run_eda()
+    eda_result = run_eda()
     return render_template(
         'eda.html',
-        recency=eda_data['recency'],
-        frequency=eda_data['frequency'],
-        monetary=eda_data['monetary'],
-        correlation=eda_data['correlation']
+        recency_labels=
+        eda_result['recency_labels'],
+        recency_counts=
+        eda_result['recency_counts'],
+        frequency_labels=
+        eda_result['frequency_labels'],
+        frequency_counts=
+        eda_result['frequency_counts'],
+        monetary_labels=
+        eda_result['monetary_labels'],
+        monetary_counts=
+        eda_result['monetary_counts'],
+        correlation=
+        eda_result['correlation']
+
     )

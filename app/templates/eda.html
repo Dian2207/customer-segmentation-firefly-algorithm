@@ -10,9 +10,6 @@
 
     <title>Hasil EDA</title>
 
-    <!-- ================================= -->
-    <!-- PLOTLY -->
-    <!-- ================================= -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <style>
@@ -57,134 +54,268 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>
-            Exploratory Data Analysis (EDA)
-        </h1>
+    <h1>
+        Exploratory Data Analysis (EDA)
+    </h1>
 
-        <!-- ================================= -->
-        <!-- HISTOGRAM RECENCY -->
-        <!-- ================================= -->
-        <div class="card">
+    <div class="card">
 
-            <h2>Histogram Recency</h2>
+        <h2>Distribusi Recency</h2>
 
-            <div id="recencyChart"
-                 class="chart">
-            </div>
-
-        </div>
-
-        <!-- ================================= -->
-        <!-- HISTOGRAM FREQUENCY -->
-        <!-- ================================= -->
-        <div class="card">
-
-            <h2>Histogram Frequency</h2>
-
-            <div id="frequencyChart"
-                 class="chart">
-            </div>
-
-        </div>
-
-        <!-- ================================= -->
-        <!-- HISTOGRAM MONETARY -->
-        <!-- ================================= -->
-        <div class="card">
-
-            <h2>Histogram Monetary</h2>
-
-            <div id="monetaryChart"
-                 class="chart">
-            </div>
-
-        </div>
-
-        <!-- ================================= -->
-        <!-- HEATMAP -->
-        <!-- ================================= -->
-        <div class="card">
-
-            <h2>Correlation Heatmap RFM</h2>
-
-            <div id="heatmapChart"
-                 class="chart">
-            </div>
-
+        <div id="recencyChart"
+             class="chart">
         </div>
 
     </div>
 
-    <script>
+    <div class="card">
+
+        <h2>Distribusi Frequency</h2>
+
+        <div id="frequencyChart"
+             class="chart">
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Distribusi Monetary</h2>
+
+        <div id="monetaryChart"
+             class="chart">
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Correlation Heatmap RFM</h2>
+
+        <div id="heatmapChart"
+             class="chart">
+        </div>
+
+    </div>
+
+</div>
+
+<script>
 
     // =====================================
     // DATA DARI FLASK
     // =====================================
 
-    const recencyData = JSON.parse('{{ recency | tojson | safe }}')
+    const recencyLabels =
+    JSON.parse('{{ recency_labels | tojson | safe }}');
 
-    const frequencyData = JSON.parse('{{ frequency | tojson | safe }}')
+    const recencyCounts =
+    JSON.parse('{{ recency_counts | tojson | safe }}');
 
-    const monetaryData = JSON.parse('{{ monetary | tojson | safe }}')
+    const frequencyLabels =
+        JSON.parse('{{ frequency_labels | tojson | safe }}');
 
-    const correlationMatrix = JSON.parse('{{ correlation | tojson | safe }}')
+    const frequencyCounts =
+        JSON.parse('{{ frequency_counts | tojson | safe }}');
+
+    const monetaryLabels =
+        JSON.parse('{{ monetary_labels | tojson | safe }}');
+
+    const monetaryCounts =
+        JSON.parse('{{ monetary_counts | tojson | safe }}');
+
+    const correlationMatrix =
+        JSON.parse('{{ correlation | tojson | safe }}');
 
     // =====================================
-    // HISTOGRAM RECENCY
+    // RECENCY
     // =====================================
 
     Plotly.newPlot(
-        'recencyChart',
 
-        [
-            {
-                x: recencyData,
-                type: 'histogram'
-            }
-        ],
+    'recencyChart',
 
+    [
         {
-            title: 'Distribusi Recency'
+            x: [
+
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+
+            ],
+
+            y: recencyCounts,
+
+            type: 'bar',
+
+            text: recencyCounts,
+
+            textposition: 'outside'
         }
-    )
+    ],
+
+    {
+
+        title: 'Distribusi Recency',
+
+        xaxis: {
+
+            title:
+            'Hari Setelah Pembelian Terakhir',
+
+            tickmode: 'array',
+
+            tickvals: [
+
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+
+            ],
+
+            ticktext: recencyLabels
+
+        },
+
+        yaxis: {
+
+            title:
+            'Jumlah Customer',
+
+            tickmode: 'array',
+
+            tickvals: [
+                0,
+                20,
+                40,
+                60,
+                80
+            ]
+
+        }
+
+    }
+
+)
 
     // =====================================
-    // HISTOGRAM FREQUENCY
+    // FREQUENCY
     // =====================================
 
     Plotly.newPlot(
+
         'frequencyChart',
 
         [
             {
-                x: frequencyData,
-                type: 'histogram'
+                x: frequencyLabels,
+
+                y: frequencyCounts,
+
+                type: 'bar',
+
+                text: frequencyCounts,
+
+                textposition: 'outside'
             }
         ],
 
         {
-            title: 'Distribusi Frequency'
+            title: 'Distribusi Frequency',
+
+            xaxis: {
+
+                title:
+                'Jumlah Pembelian'
+            },
+
+            yaxis: {
+
+                title:
+                'Jumlah Customer',
+
+                tickmode: 'array',
+
+                tickvals: [
+                    0,
+                    20,
+                    40,
+                    60,
+                    80,
+                    100,
+                    120,
+                    140,
+                    160
+                ]
+            }
         }
     )
 
     // =====================================
-    // HISTOGRAM MONETARY
+    // MONETARY
     // =====================================
 
     Plotly.newPlot(
+
         'monetaryChart',
 
         [
             {
-                x: monetaryData,
-                type: 'histogram'
+                x: monetaryLabels,
+
+                y: monetaryCounts,
+
+                type: 'bar',
+
+                text: monetaryCounts,
+
+                textposition: 'outside'
             }
         ],
 
         {
-            title: 'Distribusi Monetary'
+            title: 'Distribusi Monetary',
+
+            xaxis: {
+
+                title:
+                'Total Pengeluaran',
+
+                tickangle: -20
+            },
+
+            yaxis: {
+
+                title:
+                'Jumlah Customer',
+
+                tickmode: 'array',
+
+                tickvals: [
+                    0,
+                    20,
+                    40,
+                    60,
+                    80,
+                    100,
+                    120,
+                    140,
+                    160
+                ]
+            }
         }
     )
 
@@ -193,27 +324,101 @@
     // =====================================
 
     Plotly.newPlot(
+
         'heatmapChart',
 
         [
             {
-                z: correlationMatrix,
 
-                x: ['Recency', 'Frequency', 'Monetary'],
+                z: [
 
-                y: ['Recency', 'Frequency', 'Monetary'],
+                    [
+                        correlationMatrix[2][0],
+                        correlationMatrix[2][1],
+                        correlationMatrix[2][2]
+                    ],
 
-                type: 'heatmap'
+                    [
+                        correlationMatrix[1][0],
+                        correlationMatrix[1][1],
+                        correlationMatrix[1][2]
+                    ],
+
+                    [
+                        correlationMatrix[0][0],
+                        correlationMatrix[0][1],
+                        correlationMatrix[0][2]
+                    ]
+
+                ],
+
+                x: [
+                    'Recency',
+                    'Frequency',
+                    'Monetary'
+                ],
+
+                y: [
+                    'Monetary',
+                    'Frequency',
+                    'Recency'
+                ],
+
+                type: 'heatmap',
+
+                zmin: -0.2,
+
+                zmax: 1,
+
+                colorbar: {
+
+                    title:
+                    'Correlation'
+
+                },
+
+                text: [
+
+                    [
+                        correlationMatrix[2][0],
+                        correlationMatrix[2][1],
+                        correlationMatrix[2][2]
+                    ],
+
+                    [
+                        correlationMatrix[1][0],
+                        correlationMatrix[1][1],
+                        correlationMatrix[1][2]
+                    ],
+
+                    [
+                        correlationMatrix[0][0],
+                        correlationMatrix[0][1],
+                        correlationMatrix[0][2]
+                    ]
+
+                ],
+
+                texttemplate: "%{text}",
+
+                textfont: {
+
+                    size: 16,
+
+                    color: "black"
+                }
+
             }
         ],
 
         {
-            title: 'Correlation Heatmap RFM'
+            title:
+            'Correlation Heatmap RFM'
         }
+
     )
 
 </script>
 
 </body>
-
 </html>
