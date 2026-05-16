@@ -13,3 +13,6 @@ venv/
 
 # Processed Dataset
 data/processed/clean_data.csv
+
+# EDA Images
+app/static/images/eda/

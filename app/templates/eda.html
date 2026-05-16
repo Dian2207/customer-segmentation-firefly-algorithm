@@ -2,9 +2,18 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Hasil EDA</title>
+
+    <!-- ================================= -->
+    <!-- PLOTLY -->
+    <!-- ================================= -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <style>
 
@@ -37,9 +46,9 @@
             margin-bottom: 20px;
         }
 
-        img{
+        .chart{
             width: 100%;
-            border-radius: 10px;
+            height: 500px;
         }
 
     </style>
@@ -61,10 +70,9 @@
 
             <h2>Histogram Recency</h2>
 
-            <img 
-                src="{{ url_for('static', filename='images/eda/histogram_recency.png') }}"
-                alt="Histogram Recency"
-            >
+            <div id="recencyChart"
+                 class="chart">
+            </div>
 
         </div>
 
@@ -75,10 +83,9 @@
 
             <h2>Histogram Frequency</h2>
 
-            <img 
-                src="{{ url_for('static', filename='images/eda/histogram_frequency.png') }}"
-                alt="Histogram Frequency"
-            >
+            <div id="frequencyChart"
+                 class="chart">
+            </div>
 
         </div>
 
@@ -89,10 +96,9 @@
 
             <h2>Histogram Monetary</h2>
 
-            <img 
-                src="{{ url_for('static', filename='images/eda/histogram_monetary.png') }}"
-                alt="Histogram Monetary"
-            >
+            <div id="monetaryChart"
+                 class="chart">
+            </div>
 
         </div>
 
@@ -103,14 +109,110 @@
 
             <h2>Correlation Heatmap RFM</h2>
 
-            <img 
-                src="{{ url_for('static', filename='images/eda/heatmap_rfm.png') }}"
-                alt="Heatmap RFM"
-            >
+            <div id="heatmapChart"
+                 class="chart">
+            </div>
 
         </div>
 
     </div>
+
+    <script>
+
+    // =====================================
+    // DATA DARI FLASK
+    // =====================================
+
+    const recencyData = JSON.parse('{{ recency | tojson | safe }}')
+
+    const frequencyData = JSON.parse('{{ frequency | tojson | safe }}')
+
+    const monetaryData = JSON.parse('{{ monetary | tojson | safe }}')
+
+    const correlationMatrix = JSON.parse('{{ correlation | tojson | safe }}')
+
+    // =====================================
+    // HISTOGRAM RECENCY
+    // =====================================
+
+    Plotly.newPlot(
+        'recencyChart',
+
+        [
+            {
+                x: recencyData,
+                type: 'histogram'
+            }
+        ],
+
+        {
+            title: 'Distribusi Recency'
+        }
+    )
+
+    // =====================================
+    // HISTOGRAM FREQUENCY
+    // =====================================
+
+    Plotly.newPlot(
+        'frequencyChart',
+
+        [
+            {
+                x: frequencyData,
+                type: 'histogram'
+            }
+        ],
+
+        {
+            title: 'Distribusi Frequency'
+        }
+    )
+
+    // =====================================
+    // HISTOGRAM MONETARY
+    // =====================================
+
+    Plotly.newPlot(
+        'monetaryChart',
+
+        [
+            {
+                x: monetaryData,
+                type: 'histogram'
+            }
+        ],
+
+        {
+            title: 'Distribusi Monetary'
+        }
+    )
+
+    // =====================================
+    // HEATMAP
+    // =====================================
+
+    Plotly.newPlot(
+        'heatmapChart',
+
+        [
+            {
+                z: correlationMatrix,
+
+                x: ['Recency', 'Frequency', 'Monetary'],
+
+                y: ['Recency', 'Frequency', 'Monetary'],
+
+                type: 'heatmap'
+            }
+        ],
+
+        {
+            title: 'Correlation Heatmap RFM'
+        }
+    )
+
+</script>
 
 </body>
 
