@@ -22,6 +22,10 @@ def create_rfm(df):
 
     rfm = rfm.head(100)
 
+    rfm.to_csv("data/processed/rfm_raw.csv")
+    print("rfm_raw.csv berhasil dibuat")
+
+
     scaler = MinMaxScaler()
     rfm_scaled = scaler.fit_transform(rfm)
 
@@ -30,7 +34,7 @@ def create_rfm(df):
         columns=['Recency','Frequency','Monetary']
     )
 
-    rfm_scaled.to_csv("data/processed/rfm.csv", index=False)
+    rfm_scaled.to_csv("data/processed/rfm_scaled.csv", index=False)
+    print("rfm_scaled.csv berhasil dibuat")
 
-    print("rfm.csv berhasil dibuat")
     return rfm_scaled

@@ -15,7 +15,7 @@ def run_eda():
     # LOAD DATA RFM
     # =========================================
     rfm = pd.read_csv(
-        "data/processed/rfm.csv"
+        "data/processed/rfm_raw.csv"
     )
 
     print("\nData RFM berhasil dibaca")
