@@ -1,4 +1,3 @@
-# ml/kmeans_custom.py
 import numpy as np
 
 def assign_clusters(data, centroids):
