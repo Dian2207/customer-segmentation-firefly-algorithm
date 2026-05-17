@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from ml.eda import run_eda
+from ml.segmentasi_visual import get_cluster_visual_data
 
 main = Blueprint('main', __name__)
 
@@ -28,4 +29,17 @@ def eda():
         correlation=
         eda_result['correlation']
 
+    )
+
+@main.route("/segmentasi")
+def segmentasi():
+
+    data = get_cluster_visual_data()
+
+    return render_template(
+        "segmentasi.html",
+        recency=data["recency"],
+        frequency=data["frequency"],
+        monetary=data["monetary"],
+        cluster=data["cluster"]
     )
