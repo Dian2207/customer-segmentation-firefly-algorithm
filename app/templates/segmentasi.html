@@ -1,11 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEGEMENTASI</title>
+<meta charset="UTF-8">
+<title>Hasil Segmentasi Customer</title>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<style>
+body{
+    font-family: Arial;
+    background:#f5f5f5;
+    padding:30px;
+}
+.container{max-width:1200px;margin:auto;}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+.chart{height:700px;}
+</style>
 </head>
+
 <body>
-    <h1>SEGMENTASI</h1>
+
+<div class="container">
+    <h1>Customer Segmentation Result</h1>
+
+    <div class="card">
+        <h2>Pairplot Segmentasi (Scatter Matrix)</h2>
+        <div id="pairplot" class="chart"></div>
+    </div>
+</div>
+
+<script>
+
+const recency   = JSON.parse('{{ recency | tojson | safe }}');
+const frequency = JSON.parse('{{ frequency | tojson | safe }}');
+const monetary  = JSON.parse('{{ monetary | tojson | safe }}');
+const cluster   = JSON.parse('{{ cluster | tojson | safe }}');
+
+const data = [{
+    type: 'splom',
+    dimensions: [
+        {label:'Recency', values: recency},
+        {label:'Frequency', values: frequency},
+        {label:'Monetary', values: monetary}
+    ],
+    text: cluster,
+    marker: {
+        color: cluster,
+        size: 6,
+        line: {width:0.5}
+    }
+}];
+
+Plotly.newPlot('pairplot', data, {
+    title: "Pairplot RFM by Cluster"
+});
+
+</script>
+
 </body>
 </html>
