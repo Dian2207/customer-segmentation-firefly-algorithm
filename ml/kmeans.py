@@ -27,3 +27,33 @@ def run_kmeans(data, init_centroids, max_iter=50):
         centroids = new_centroids
 
     return labels, centroids
+
+def compute_wcss(data, labels, centroids):
+    wcss = 0
+
+    for i, centroid in enumerate(centroids):
+        cluster_points = data[labels == i]
+
+        if len(cluster_points) > 0:
+            distances = np.linalg.norm(cluster_points - centroid, axis=1)
+            wcss += np.sum(distances ** 2)
+
+    return wcss
+
+def elbow_method(data, k_range=range(2, 10), max_iter=50):
+    wcss_values = []
+
+    print("Menjalankan Elbow Method...")
+
+    for k in k_range:
+
+        init_centroids = data[np.random.choice(len(data), k, replace=False)]
+
+        labels, centroids = run_kmeans(data, init_centroids, max_iter)
+
+        wcss = compute_wcss(data, labels, centroids)
+        wcss_values.append(wcss)
+
+        print(f"K = {k} | WCSS = {wcss:.2f}")
+
+    return list(k_range), wcss_values
