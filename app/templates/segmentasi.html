@@ -34,6 +34,32 @@ body{
     </div>
 </div>
 
+<div class="card" style="margin-top:20px;">
+    <h2>Tabel Ringkasan Cluster</h2>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse:collapse;">
+        <thead style="background:#eee;">
+            <tr>
+                <th>Cluster</th>
+                <th>Recency</th>
+                <th>Frequency</th>
+                <th>Monetary</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in cluster_summary %}
+            <tr>
+                <td>{{ row.Cluster }}</td>
+                <td>{{ row.Recency }}</td>
+                <td>{{ row.Frequency }}</td>
+                <td>{{ row.Monetary }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 <script>
 
 const recency   = JSON.parse('{{ recency | tojson | safe }}');

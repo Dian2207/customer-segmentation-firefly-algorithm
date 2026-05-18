@@ -40,20 +40,28 @@ def run_firefly(data, k, n_fireflies=10, max_iter=20):
     dim = data.shape[1]
     fireflies = init_fireflies(n_fireflies, k, dim)
 
-    for iteration in range(max_iter):
-        fitness = np.array([
-            calculate_sse(data, f) for f in fireflies
-        ])
+    best_firefly = None
+    best_fitness = float("inf")
+
+    for _ in range(max_iter):
+
+        # hitung fitness sekali per iterasi
+        fitness = np.array([calculate_sse(data, f) for f in fireflies])
 
         for i in range(n_fireflies):
             for j in range(n_fireflies):
+
                 if fitness[j] < fitness[i]:
                     fireflies[i] = move_firefly(fireflies[i], fireflies[j])
 
-    # firefly terbaik = SSE terkecil
-    best_idx = np.argmin([
-        calculate_sse(data, f) for f in fireflies
-    ])
+        # update fitness setelah movement
+        fitness = np.array([calculate_sse(data, f) for f in fireflies])
 
-    best_centroids = fireflies[best_idx]
-    return best_centroids
+        idx = np.argmin(fitness)
+
+        # elitism (simpen best global)
+        if fitness[idx] < best_fitness:
+            best_fitness = fitness[idx]
+            best_firefly = fireflies[idx].copy()
+
+    return best_firefly

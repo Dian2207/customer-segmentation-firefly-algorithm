@@ -38,5 +38,25 @@ def run_full_evaluation():
     df_test.to_csv("data/processed/clustered_test.csv", index=False)
 
     print("Hasil clustering test disimpan ke clustered_test.csv")
+    df_test_raw = pd.read_csv("data/processed/test_raw.csv").reset_index(drop=True)
 
-    return silhouette, best_k
+    # pastikan panjang sama (anti error)
+    min_len = min(len(df_test_raw), len(labels_test))
+    df_test_raw = df_test_raw.iloc[:min_len].copy()
+    labels_test = labels_test[:min_len]
+
+    df_test_raw["Cluster"] = labels_test
+
+    cluster_summary = (
+        df_test_raw.groupby("Cluster")[["Recency", "Frequency", "Monetary"]]
+        .mean()
+        .reset_index()
+        .sort_values("Cluster")
+    )
+
+    cluster_summary.to_csv("data/processed/cluster_summary.csv", index=False)
+
+    print("\nTabel ringkasan cluster:")
+    print(cluster_summary)
+
+    return silhouette, best_k, cluster_summary

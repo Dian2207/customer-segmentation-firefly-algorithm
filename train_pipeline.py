@@ -10,13 +10,13 @@ print("======================================")
 
 df_clean = load_and_clean_data()
 
-rfm_scaled = create_rfm(df_clean)
+rfm_raw, rfm_scaled = create_rfm(df_clean)
 
-split_dataset(rfm_scaled)
+split_dataset(rfm_scaled, rfm_raw)
 
 run_eda()
 
-silhouette, best_k = run_full_evaluation()
+silhouette, best_k, cluster_summary = run_full_evaluation()
 
 print("\n======================================")
 print("TRAINING SELESAI")

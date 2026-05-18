@@ -35,4 +35,4 @@ def create_rfm(df):
     rfm_scaled.to_csv("data/processed/rfm_scaled.csv", index=False)
     print("rfm_scaled.csv berhasil dibuat")
 
-    return rfm_scaled
+    return rfm, rfm_scaled
