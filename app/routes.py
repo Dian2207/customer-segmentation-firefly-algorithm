@@ -8,7 +8,12 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def home():
-    return "Flask berhasil jalan!"
+    return render_template('dashboard.html')
+
+
+@main.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 
 @main.route('/eda')
