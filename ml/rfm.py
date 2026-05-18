@@ -20,8 +20,6 @@ def create_rfm(df):
 
     rfm.columns = ['Recency','Frequency','Monetary']
 
-    rfm = rfm.head(100)
-
     rfm.to_csv("data/processed/rfm_raw.csv")
     print("rfm_raw.csv berhasil dibuat")
 
