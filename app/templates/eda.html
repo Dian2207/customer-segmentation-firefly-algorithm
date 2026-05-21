@@ -711,7 +711,7 @@ Plotly.newPlot(
 
             type:'heatmap',
 
-            zmin:-1,
+            zmin:-0.2,
             zmax:1,
 
             text:correlationMatrix,
@@ -720,11 +720,35 @@ Plotly.newPlot(
 
             textfont:{
                 size:16,
-                color:'black'
+                color:'white'
             },
 
+            colorscale:'RdBu_r',
+
             colorbar:{
-                title:'Correlation'
+
+                title:'Correlation',
+
+                tickvals:[
+                    -0.2,
+                    0.0,
+                    0.2,
+                    0.4,
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+
+                ticktext:[
+                    '-0.2',
+                    '0.0',
+                    '0.2',
+                    '0.4',
+                    '0.6',
+                    '0.8',
+                    '1.0'
+                ]
+
             }
 
         }
