@@ -511,6 +511,7 @@ Plotly.newPlot(
 
     [
         {
+
             x: recencyLabels,
 
             y: recencyCounts,
@@ -522,10 +523,15 @@ Plotly.newPlot(
             textposition:'outside',
 
             marker:{
+
                 color:'#2067d7',
+
                 opacity:0.85
+
             }
+
         }
+
     ],
 
     {
@@ -544,7 +550,21 @@ Plotly.newPlot(
         },
 
         yaxis:{
-            title:'Jumlah Customer'
+
+            title:'Jumlah Customer',
+
+            range:[0,800],
+
+            tickmode:'array',
+
+            tickvals:[
+                0,
+                200,
+                400,
+                600,
+                800
+            ]
+
         }
 
     },
@@ -691,12 +711,6 @@ Plotly.newPlot(
 
             type:'heatmap',
 
-            colorscale:[
-                [0, '#eaf0ff'],
-                [0.5, '#74bcf5'],
-                [1, '#2067d7']
-            ],
-
             zmin:-1,
             zmax:1,
 
@@ -725,6 +739,10 @@ Plotly.newPlot(
             font:{
                 size:22
             }
+        },
+
+        yaxis:{
+            autorange:'reversed'
         }
 
     },
