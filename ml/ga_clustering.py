@@ -121,7 +121,7 @@ def run_ga_clustering():
         index=False
     )
 
-    print("\nGA clustering selesai 🚀")
+    print("\nGA clustering selesai ")
 
     print("File tersimpan:")
     print("data/processed/clustered_ga.csv")
