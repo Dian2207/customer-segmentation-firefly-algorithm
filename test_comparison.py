@@ -1,3 +1,3 @@
-from ml.evaluate_comparison import run_comparison
+from comparison.evaluate_ga_comparison import run_comparison
 
 run_comparison()

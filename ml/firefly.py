@@ -1,5 +1,6 @@
 # ml/firefly.py
 import numpy as np
+np.random.seed(42)
 
 # ==============================
 # HITUNG SSE (fitness)

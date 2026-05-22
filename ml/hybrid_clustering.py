@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+np.random.seed(42)
 from ml.firefly import run_firefly
 from ml.kmeans import run_kmeans
 
@@ -62,7 +63,7 @@ def run_hybrid_clustering():
     df["Cluster"] = labels
     df.to_csv("data/processed/clustered_train.csv", index=False)
 
-    print("\nClustering selesai 🚀")
+    print("\nClustering selesai ")
     print("File tersimpan: data/processed/clustered_train.csv")
 
     return centroids, best_k

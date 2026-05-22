@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from ml.ga import run_ga
+from comparison.ga import run_ga
 from ml.kmeans import run_kmeans
 
 
@@ -36,7 +36,6 @@ def find_best_k_elbow(
 
         centroids = run_ga(data, k)
 
-        # validasi centroid
         if np.any(np.isnan(centroids)) or np.any(np.isinf(centroids)):
 
             print("WARNING: centroid invalid → random init")
@@ -117,13 +116,13 @@ def run_ga_clustering():
     df["Cluster"] = labels
 
     df.to_csv(
-        "data/processed/clustered_ga.csv",
+        "data/result/clustered_ga_result.csv",
         index=False
     )
 
     print("\nGA clustering selesai ")
 
     print("File tersimpan:")
-    print("data/processed/clustered_ga.csv")
+    print("data/result/clustered_ga_result.csv")
 
     return labels, centroids, best_k
