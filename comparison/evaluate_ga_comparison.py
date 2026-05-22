@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.metrics import silhouette_score
 
 from ml.hybrid_clustering import run_hybrid_clustering
-from ml.ga_clustering import run_ga_clustering
+from comparison.ga_clustering import run_ga_clustering
 
 def predict_cluster(data, centroids):
 
@@ -146,13 +146,13 @@ def run_comparison():
 
     comparison.to_csv(
 
-        "data/processed/comparison_result.csv",
+       "data/result/comparison_ga_result.csv",
 
         index=False
 
     )
 
     print("\nFile tersimpan:")
-    print("data/processed/comparison_result.csv")
+    print("data/result/comparison_ga_result.csv")
 
     return comparison
