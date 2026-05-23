@@ -73,13 +73,13 @@ def run_kmeans_clustering():
     df["Cluster"] = labels
 
     df.to_csv(
-        "data/processed/clustered_train_kmeans.csv",
+        "data/result/clustered_train_kmeans.csv",
         index=False
     )
 
     print(
         "\nFile tersimpan: "
-        "data/processed/clustered_train_kmeans.csv"
+        "data/result/clustered_train_kmeans.csv"
     )
 
     return labels, centroids, best_k

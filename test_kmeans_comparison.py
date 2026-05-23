@@ -1,0 +1,3 @@
+from comparison.evaluate_kmeans_comparison import run_comparison_kmeans
+
+run_comparison_kmeans()

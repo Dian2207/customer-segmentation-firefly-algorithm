@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.metrics import silhouette_score
 
 from ml.hybrid_clustering import run_hybrid_clustering
-from ml.kmeans import run_kmeans
+from comparison.kmeans_clustering import run_kmeans_clustering
 
 def predict_cluster(data, centroids):
 
@@ -80,7 +80,7 @@ def evaluate_kmeans():
 
     start_time = time.time()
 
-    labels_train, centroids, best_k = run_kmeans()
+    labels_train, centroids, best_k = run_kmeans_clustering()
 
     end_time = time.time()
 
@@ -124,7 +124,7 @@ def evaluate_kmeans():
 
     }
 
-def run_comparison():
+def run_comparison_kmeans():
 
     print("\n======================================")
     print("PERBANDINGAN METODE CLUSTERING")

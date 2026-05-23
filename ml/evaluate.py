@@ -54,7 +54,7 @@ def run_full_evaluation():
         .sort_values("Cluster")
     )
 
-    cluster_summary.to_csv("data/processed/cluster_summary.csv", index=False)
+    cluster_summary.to_csv("data/result/cluster_summary.csv", index=False)
 
     print("\nTabel ringkasan cluster:")
     print(cluster_summary)
