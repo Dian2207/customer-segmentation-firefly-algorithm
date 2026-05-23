@@ -33,8 +33,26 @@ def find_best_k_elbow(data, k_range=range(2, 10)):
 
         print("WCSS:", round(wcss, 2))
 
-    deltas = np.diff(wcss_values)
-    best_k = k_range[np.argmin(deltas) + 1]
+    k_values = list(k_range)
+
+    points = np.column_stack((k_values, wcss_values))
+
+    first_point = points[0]
+    last_point = points[-1]
+
+    line_vector = last_point - first_point
+    line_vector = line_vector / np.linalg.norm(line_vector)
+
+    distances = []
+
+    for point in points:
+        vector = point - first_point
+        projection = np.dot(vector, line_vector) * line_vector
+        perpendicular = vector - projection
+        distances.append(np.linalg.norm(perpendicular))
+
+    best_index = np.argmax(distances)
+    best_k = k_values[best_index]
 
     print("\nELBOW ditemukan pada K =", best_k)
     return best_k, wcss_values

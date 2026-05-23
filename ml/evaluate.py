@@ -40,7 +40,7 @@ def run_full_evaluation():
     print("Hasil clustering test disimpan ke clustered_test.csv")
     df_test_raw = pd.read_csv("data/processed/test_raw.csv").reset_index(drop=True)
 
-    # pastikan panjang sama (anti error)
+
     min_len = min(len(df_test_raw), len(labels_test))
     df_test_raw = df_test_raw.iloc[:min_len].copy()
     labels_test = labels_test[:min_len]
