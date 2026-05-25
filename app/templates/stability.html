@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,11 +8,13 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>EDA Analytics</title>
+<title>Stability Analytics</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
@@ -66,7 +67,9 @@ body{
 
 .navbar{
     background: rgba(255,255,255,0.08);
+
     backdrop-filter: blur(14px);
+
     -webkit-backdrop-filter: blur(14px);
 
     padding:18px 0;
@@ -106,7 +109,9 @@ body{
 
 .hero::before{
     content:'';
+
     position:absolute;
+
     width:350px;
     height:350px;
 
@@ -118,6 +123,7 @@ body{
     );
 
     border-radius:50%;
+
     filter:blur(80px);
 
     top:30px;
@@ -165,7 +171,7 @@ body{
 
 .chart-container{
     width:100%;
-    height:500px;
+    height:550px;
 }
 
 .stats-card{
@@ -201,6 +207,11 @@ body{
     color:var(--primary);
 }
 
+.analysis-text{
+    color:var(--text-soft);
+    line-height:2;
+    text-align:justify;
+}
 
 .footer{
     padding:20px 0;
@@ -264,7 +275,7 @@ body{
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active fw-semibold text-primary"
+                    <a class="nav-link"
                        href="/eda">
                         EDA
                     </a>
@@ -278,7 +289,7 @@ body{
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link"
+                    <a class="nav-link active fw-semibold text-primary"
                        href="/stability">
                         Stability
                     </a>
@@ -297,29 +308,31 @@ body{
 
     <div class="container">
 
-        <div class="row align-items-center">
+        <h1 class="hero-title">
 
-            <div class="col-lg-8">
+            Parameter Stability Analytics
 
-                <h1 class="hero-title">
-                    Exploratory Data Analysis
-                </h1>
+        </h1>
 
-                <p class="hero-subtitle">
-                    Analisis distribusi Recency, Frequency,
-                    dan Monetary untuk memahami pola perilaku
-                    customer sebelum proses segmentasi dilakukan.
-                </p>
+        <p class="hero-subtitle">
 
-            </div>
+            Analisis stabilitas parameter clustering
+            berdasarkan silhouette score dan
+            execution time pada metode
+            K-Means, Hybrid KMeans + Firefly,
+            dan Hybrid KMeans + GA
+            selama 50 iterasi pengujian.
 
-        </div>
+        </p>
 
     </div>
 
 </section>
 
-<!-- STATS -->
+<!-- =====================================
+     STATS
+===================================== -->
+
 <div class="container mb-5">
 
     <div class="row g-4">
@@ -329,11 +342,15 @@ body{
             <div class="stats-card">
 
                 <div class="stats-title">
-                    Total Recency Group
+
+                    Total Iteration
+
                 </div>
 
                 <div class="stats-value">
-                    {{ recency_labels|length }}
+
+                    {{ total_iteration }}
+
                 </div>
 
             </div>
@@ -345,11 +362,15 @@ body{
             <div class="stats-card">
 
                 <div class="stats-title">
-                    Total Frequency Group
+
+                    Best Method
+
                 </div>
 
                 <div class="stats-value">
-                    {{ frequency_labels|length }}
+
+                    {{ best_method }}
+
                 </div>
 
             </div>
@@ -361,11 +382,15 @@ body{
             <div class="stats-card">
 
                 <div class="stats-title">
-                    Total Monetary Group
+
+                    Fastest Method
+
                 </div>
 
                 <div class="stats-value">
-                    {{ monetary_labels|length }}
+
+                    {{ fastest }}
+
                 </div>
 
             </div>
@@ -376,117 +401,129 @@ body{
 
 </div>
 
-<!-- RECENCY -->
+<!-- =====================================
+     SILHOUETTE CHART
+===================================== -->
+
 <div class="container mb-5">
 
     <div class="glass-card">
 
         <h2 class="section-title">
-            Distribusi Recency
+
+            Parameter Stability Comparison
+
         </h2>
 
-        <div id="recencyChart"
+        <div id="silhouetteChart"
              class="chart-container">
+
         </div>
 
     </div>
 
 </div>
 
-<!-- FREQUENCY -->
+<!-- =====================================
+     EXECUTION TIME CHART
+===================================== -->
+
 <div class="container mb-5">
 
     <div class="glass-card">
 
         <h2 class="section-title">
-            Distribusi Frequency
+
+            Execution Time Comparison
+
         </h2>
 
-        <div id="frequencyChart"
+        <div id="timeChart"
              class="chart-container">
+
         </div>
 
     </div>
 
 </div>
 
-<!-- MONETARY -->
+<!-- =====================================
+     ANALYSIS
+===================================== -->
+
 <div class="container mb-5">
 
     <div class="glass-card">
 
         <h2 class="section-title">
-            Distribusi Monetary
+
+            Stability Analysis
+
         </h2>
 
-        <div id="monetaryChart"
-             class="chart-container">
-        </div>
+        <p class="analysis-text">
+
+            {{ analysis }}
+
+        </p>
 
     </div>
 
 </div>
 
-<!-- HEATMAP -->
-<div class="container mb-5">
+<!-- =====================================
+     FOOTER
+===================================== -->
 
-    <div class="glass-card">
-
-        <h2 class="section-title">
-            Correlation Heatmap RFM
-        </h2>
-
-        <div id="heatmapChart"
-             class="chart-container">
-        </div>
-
-    </div>
-
-</div>
-
-<!-- FOOTER -->
 <footer class="footer">
 
     <div class="container">
 
         <p>
+
             © 2026 Customer Segmentation.
             All rights reserved.
+
         </p>
 
     </div>
 
 </footer>
 
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
 <script>
 
 // =====================================
-// DATA DARI FLASK
+// DATA FLASK
 // =====================================
 
-const recencyLabels =
-JSON.parse('{{ recency_labels | tojson | safe }}');
+const iteration =
+JSON.parse('{{ iterations | tojson | safe }}');
 
-const recencyCounts =
-JSON.parse('{{ recency_counts | tojson | safe }}');
+const kmeansSilhouette =
+JSON.parse('{{ kmeans | tojson | safe }}');
 
-const frequencyLabels =
-JSON.parse('{{ frequency_labels | tojson | safe }}');
+const hybridSilhouette =
+JSON.parse('{{ hybrid | tojson | safe }}');
 
-const frequencyCounts =
-JSON.parse('{{ frequency_counts | tojson | safe }}');
+const hybridGaSilhouette =
+JSON.parse('{{ hybrid_ga | tojson | safe }}');
 
-const monetaryLabels =
-JSON.parse('{{ monetary_labels | tojson | safe }}');
+const kmeansTime =
+JSON.parse('{{ kmeans_time | tojson | safe }}');
 
-const monetaryCounts =
-JSON.parse('{{ monetary_counts | tojson | safe }}');
+const hybridTime =
+JSON.parse('{{ hybrid_time | tojson | safe }}');
 
-const correlationMatrix =
-JSON.parse('{{ correlation | tojson | safe }}');
+const hybridGaTime =
+JSON.parse('{{ hybrid_ga_time | tojson | safe }}');
+
 
 // =====================================
-// GLOBAL LAYOUT
+// COMMON LAYOUT
 // =====================================
 
 const commonLayout = {
@@ -506,35 +543,64 @@ const commonLayout = {
         t:70,
         b:70
     }
+
 };
 
+
 // =====================================
-// RECENCY
+// SILHOUETTE CHART
 // =====================================
 
 Plotly.newPlot(
 
-    'recencyChart',
+    'silhouetteChart',
 
     [
+
         {
 
-            x: recencyLabels,
+            x: iteration,
+            y: kmeansSilhouette,
 
-            y: recencyCounts,
+            mode:'lines+markers',
 
-            type:'bar',
+            name:'K-Means',
 
-            text:recencyCounts,
+            line:{
+                width:3,
+                color:'#2067d7'
+            }
 
-            textposition:'outside',
+        },
 
-            marker:{
+        {
 
-                color:'#2067d7',
+            x: iteration,
+            y: hybridSilhouette,
 
-                opacity:0.85
+            mode:'lines+markers',
 
+            name:'Hybrid KMeans + Firefly',
+
+            line:{
+                width:3,
+                color:'#7c4dff'
+            }
+
+        },
+
+        {
+
+            x: iteration,
+            y: hybridGaSilhouette,
+
+            mode:'lines+markers',
+
+            name:'Hybrid KMeans + GA',
+
+            line:{
+                width:3,
+                color:'#ff4fd8'
             }
 
         }
@@ -546,32 +612,15 @@ Plotly.newPlot(
         ...commonLayout,
 
         title:{
-            text:'Distribusi Recency',
-            font:{
-                size:22
-            }
+            text:'Parameter Stability Comparison'
         },
 
         xaxis:{
-            title:'Hari Setelah Pembelian Terakhir'
+            title:'Iteration'
         },
 
         yaxis:{
-
-            title:'Jumlah Customer',
-
-            range:[0,800],
-
-            tickmode:'array',
-
-            tickvals:[
-                0,
-                200,
-                400,
-                600,
-                800
-            ]
-
+            title:'Silhouette Score'
         }
 
     },
@@ -582,31 +631,65 @@ Plotly.newPlot(
 
 );
 
+
 // =====================================
-// FREQUENCY
+// EXECUTION TIME CHART
 // =====================================
 
 Plotly.newPlot(
 
-    'frequencyChart',
+    'timeChart',
 
     [
+
         {
-            x: frequencyLabels,
 
-            y: frequencyCounts,
+            x: iteration,
+            y: kmeansTime,
 
-            type:'bar',
+            mode:'lines+markers',
 
-            text:frequencyCounts,
+            name:'K-Means',
 
-            textposition:'outside',
-
-            marker:{
-                color:'#3bd8fe',
-                opacity:0.85
+            line:{
+                width:3,
+                color:'#2067d7'
             }
+
+        },
+
+        {
+
+            x: iteration,
+            y: hybridTime,
+
+            mode:'lines+markers',
+
+            name:'Hybrid KMeans + Firefly',
+
+            line:{
+                width:3,
+                color:'#7c4dff'
+            }
+
+        },
+
+        {
+
+            x: iteration,
+            y: hybridGaTime,
+
+            mode:'lines+markers',
+
+            name:'Hybrid KMeans + GA',
+
+            line:{
+                width:3,
+                color:'#ff4fd8'
+            }
+
         }
+
     ],
 
     {
@@ -614,166 +697,15 @@ Plotly.newPlot(
         ...commonLayout,
 
         title:{
-            text:'Distribusi Frequency',
-            font:{
-                size:22
-            }
+            text:'Execution Time Comparison'
         },
 
         xaxis:{
-            title:'Jumlah Pembelian'
+            title:'Iteration'
         },
 
         yaxis:{
-            title:'Jumlah Customer'
-        }
-
-    },
-
-    {
-        responsive:true
-    }
-
-);
-
-// =====================================
-// MONETARY
-// =====================================
-
-Plotly.newPlot(
-
-    'monetaryChart',
-
-    [
-        {
-            x: monetaryLabels,
-
-            y: monetaryCounts,
-
-            type:'bar',
-
-            text:monetaryCounts,
-
-            textposition:'outside',
-
-            marker:{
-                color:'#74bcf5',
-                opacity:0.9
-            }
-        }
-    ],
-
-    {
-
-        ...commonLayout,
-
-        title:{
-            text:'Distribusi Monetary',
-            font:{
-                size:22
-            }
-        },
-
-        xaxis:{
-            title:'Total Pengeluaran',
-            tickangle:-20
-        },
-
-        yaxis:{
-            title:'Jumlah Customer'
-        }
-
-    },
-
-    {
-        responsive:true
-    }
-
-);
-
-// =====================================
-// HEATMAP
-// =====================================
-
-Plotly.newPlot(
-
-    'heatmapChart',
-
-    [
-        {
-
-            z: correlationMatrix,
-
-            x:[
-                'Recency',
-                'Frequency',
-                'Monetary'
-            ],
-
-            y:[
-                'Recency',
-                'Frequency',
-                'Monetary'
-            ],
-
-            type:'heatmap',
-
-            zmin:-0.2,
-            zmax:1,
-
-            text:correlationMatrix,
-
-            texttemplate:'%{text}',
-
-            textfont:{
-                size:16,
-                color:'white'
-            },
-
-            colorscale:'RdBu_r',
-
-            colorbar:{
-
-                title:'Correlation',
-
-                tickvals:[
-                    -0.2,
-                    0.0,
-                    0.2,
-                    0.4,
-                    0.6,
-                    0.8,
-                    1.0
-                ],
-
-                ticktext:[
-                    '-0.2',
-                    '0.0',
-                    '0.2',
-                    '0.4',
-                    '0.6',
-                    '0.8',
-                    '1.0'
-                ]
-
-            }
-
-        }
-    ],
-
-    {
-
-        ...commonLayout,
-
-        title:{
-            text:'Correlation Heatmap RFM',
-            font:{
-                size:22
-            }
-        },
-
-        yaxis:{
-            autorange:'reversed'
+            title:'Time (seconds)'
         }
 
     },
@@ -790,4 +722,3 @@ Plotly.newPlot(
 
 </body>
 </html>
-```
