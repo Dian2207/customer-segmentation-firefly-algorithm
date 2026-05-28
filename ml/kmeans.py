@@ -46,7 +46,7 @@ def elbow_method(data, k_range=range(2, 10), max_iter=50):
     print("Menjalankan Elbow Method...")
 
     for k in k_range:
-        np.random.seed(42)
+        np.random.seed(None)
         init_centroids = data[np.random.choice(len(data), k, replace=False)]
 
         labels, centroids = run_kmeans(data, init_centroids, max_iter)

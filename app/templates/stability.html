@@ -319,8 +319,9 @@ body{
             Analisis stabilitas parameter clustering
             berdasarkan silhouette score dan
             execution time pada metode
-            K-Means, Hybrid KMeans + Firefly,
-            dan Hybrid KMeans + GA
+            K-Means, Firefly,
+            Hybrid K-Means + GA,
+            dan Hybrid K-Means + Firefly
             selama 50 iterasi pengujian.
 
         </p>
@@ -328,6 +329,7 @@ body{
     </div>
 
 </section>
+
 
 <!-- =====================================
      STATS
@@ -401,6 +403,7 @@ body{
 
 </div>
 
+
 <!-- =====================================
      SILHOUETTE CHART
 ===================================== -->
@@ -424,6 +427,7 @@ body{
 
 </div>
 
+
 <!-- =====================================
      EXECUTION TIME CHART
 ===================================== -->
@@ -446,6 +450,7 @@ body{
     </div>
 
 </div>
+
 
 <!-- =====================================
      ANALYSIS
@@ -471,6 +476,7 @@ body{
 
 </div>
 
+
 <!-- =====================================
      FOOTER
 ===================================== -->
@@ -490,6 +496,7 @@ body{
 
 </footer>
 
+
 <!-- =====================================
      JAVASCRIPT
 ===================================== -->
@@ -506,20 +513,27 @@ JSON.parse('{{ iterations | tojson | safe }}');
 const kmeansSilhouette =
 JSON.parse('{{ kmeans | tojson | safe }}');
 
-const hybridSilhouette =
-JSON.parse('{{ hybrid | tojson | safe }}');
+const fireflySilhouette =
+JSON.parse('{{ firefly | tojson | safe }}');
 
 const hybridGaSilhouette =
 JSON.parse('{{ hybrid_ga | tojson | safe }}');
 
+const hybridSilhouette =
+JSON.parse('{{ hybrid | tojson | safe }}');
+
+
 const kmeansTime =
 JSON.parse('{{ kmeans_time | tojson | safe }}');
 
-const hybridTime =
-JSON.parse('{{ hybrid_time | tojson | safe }}');
+const fireflyTime =
+JSON.parse('{{ firefly_time | tojson | safe }}');
 
 const hybridGaTime =
 JSON.parse('{{ hybrid_ga_time | tojson | safe }}');
+
+const hybridTime =
+JSON.parse('{{ hybrid_time | tojson | safe }}');
 
 
 // =====================================
@@ -576,15 +590,15 @@ Plotly.newPlot(
         {
 
             x: iteration,
-            y: hybridSilhouette,
+            y: fireflySilhouette,
 
             mode:'lines+markers',
 
-            name:'Hybrid KMeans + Firefly',
+            name:'Firefly',
 
             line:{
                 width:3,
-                color:'#7c4dff'
+                color:'#00b894'
             }
 
         },
@@ -596,11 +610,27 @@ Plotly.newPlot(
 
             mode:'lines+markers',
 
-            name:'Hybrid KMeans + GA',
+            name:'Hybrid K-Means + GA',
 
             line:{
                 width:3,
                 color:'#ff4fd8'
+            }
+
+        },
+
+        {
+
+            x: iteration,
+            y: hybridSilhouette,
+
+            mode:'lines+markers',
+
+            name:'Hybrid K-Means + Firefly',
+
+            line:{
+                width:3,
+                color:'#7c4dff'
             }
 
         }
@@ -609,21 +639,31 @@ Plotly.newPlot(
 
     {
 
-        ...commonLayout,
+    ...commonLayout,
 
-        title:{
-            text:'Parameter Stability Comparison'
-        },
-
-        xaxis:{
-            title:'Iteration'
-        },
-
-        yaxis:{
-            title:'Silhouette Score'
-        }
-
+    title:{
+        text:'Parameter Stability Comparison'
     },
+
+    xaxis:{
+        title:'Iteration'
+    },
+
+    yaxis:{
+
+        title:'Silhouette Score',
+
+        tick0:0.45,
+
+        dtick:0.05,
+
+        gridcolor:'rgba(0,0,0,0.08)',
+
+        zeroline:false
+
+    }
+
+},
 
     {
         responsive:true
@@ -661,15 +701,15 @@ Plotly.newPlot(
         {
 
             x: iteration,
-            y: hybridTime,
+            y: fireflyTime,
 
             mode:'lines+markers',
 
-            name:'Hybrid KMeans + Firefly',
+            name:'Firefly',
 
             line:{
                 width:3,
-                color:'#7c4dff'
+                color:'#00b894'
             }
 
         },
@@ -681,11 +721,27 @@ Plotly.newPlot(
 
             mode:'lines+markers',
 
-            name:'Hybrid KMeans + GA',
+            name:'Hybrid K-Means + GA',
 
             line:{
                 width:3,
                 color:'#ff4fd8'
+            }
+
+        },
+
+        {
+
+            x: iteration,
+            y: hybridTime,
+
+            mode:'lines+markers',
+
+            name:'Hybrid K-Means + Firefly',
+
+            line:{
+                width:3,
+                color:'#7c4dff'
             }
 
         }

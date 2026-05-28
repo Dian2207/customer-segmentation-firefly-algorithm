@@ -55,7 +55,7 @@ def run_kmeans_clustering():
 
     print("K terbaik:", best_k)
 
-    np.random.seed(42)
+    np.random.seed(None)
 
     init_centroids = data[
         np.random.choice(

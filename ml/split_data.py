@@ -7,14 +7,14 @@ def split_dataset(rfm_scaled, rfm_raw):
         rfm_scaled,
         rfm_raw,
         test_size=0.30,
-        random_state=42
+        random_state=None,
     )
 
     X_val_scaled, X_test_scaled, X_val_raw, X_test_raw = train_test_split(
         X_temp_scaled,
         X_temp_raw,
         test_size=0.50,
-        random_state=42
+        random_state=None,
     )
 
     X_train_scaled.to_csv("data/processed/train.csv", index=False)

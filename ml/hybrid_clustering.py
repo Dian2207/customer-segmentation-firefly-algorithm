@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-np.random.seed(42)
+np.random.seed(None)
 from ml.firefly import run_firefly
 from ml.kmeans import run_kmeans
 

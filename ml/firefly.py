@@ -1,5 +1,5 @@
 import numpy as np
-np.random.seed(42)
+np.random.seed(None)
 
 
 def calculate_sse(data, centroids):

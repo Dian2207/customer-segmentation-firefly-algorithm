@@ -2,53 +2,26 @@
 # PARAMETER_STABILITY_COMPARISON.PY
 # ==========================================
 
-import time
 import pandas as pd
 import numpy as np
 
-from sklearn.metrics import silhouette_score
-
-from comparison.kmeans_clustering import (
-    run_kmeans_clustering
-)
-
-from comparison.ga_clustering import (
-    run_ga_clustering
-)
-
-from ml.hybrid_clustering import (
-    run_hybrid_clustering
+from comparison.evaluate_kmeans_comparison import (
+    evaluate_kmeans
 )
 
 from comparison.evaluate_firefly_comparison import (
+    evaluate_hybrid_firefly,
     evaluate_firefly_only
+)
+
+from comparison.evaluate_ga_comparison import (
+    evaluate_ga
 )
 
 
 # ==========================================
-# PREDICT CLUSTER
+# RESULT CONTAINER
 # ==========================================
-def predict_cluster(data, centroids):
-
-    distances = np.linalg.norm(
-        data[:, None] - centroids,
-        axis=2
-    )
-
-    return np.argmin(
-        distances,
-        axis=1
-    )
-
-
-# ==========================================
-# LOAD VALIDATION
-# ==========================================
-val = pd.read_csv(
-    "data/processed/validation.csv"
-).values
-
-
 results = []
 
 
@@ -57,127 +30,128 @@ results = []
 # ==========================================
 for iteration in range(1, 51):
 
-    print(f"\n================================")
-    print(f"ITERASI {iteration}")
+    print("\n================================")
+    print(f"ITERASI {iteration}/50")
     print("================================")
 
     np.random.seed(None)
 
-    # ======================================
-    # KMEANS
-    # ======================================
-    start = time.time()
+    result = {
 
-    labels_train, centroids, best_k = (
-        run_kmeans_clustering()
+        "iteration": iteration
+
+    }
+
+
+    # ======================================
+    # K-MEANS
+    # ======================================
+    print("\n[1] K-MEANS")
+
+    kmeans_result = evaluate_kmeans()
+
+    result["kmeans_silhouette"] = (
+        kmeans_result["silhouette"]
     )
 
-    execution_time = time.time() - start
-
-    labels = predict_cluster(
-        val,
-        centroids
+    result["kmeans_time"] = (
+        kmeans_result["time"]
     )
-
-    silhouette = silhouette_score(
-        val,
-        labels
-    )
-
-    results.append({
-
-        "iteration": iteration,
-
-        "kmeans_silhouette": silhouette,
-
-        "kmeans_time": execution_time
-
-    })
 
 
     # ======================================
-    # FIREFLY ONLY
+    # FIREFLY
     # ======================================
-    start = time.time()
+    print("\n[2] FIREFLY")
 
-    firefly_result = evaluate_firefly_only()
+    firefly_result = (
+        evaluate_firefly_only()
+    )
 
-    execution_time = time.time() - start
-
-    results[-1]["firefly_silhouette"] = (
+    result["firefly_silhouette"] = (
         firefly_result["silhouette"]
     )
 
-    results[-1]["firefly_time"] = (
-        execution_time
+    result["firefly_time"] = (
+        firefly_result["time"]
     )
 
 
     # ======================================
-    # HYBRID KMEANS + FIREFLY
+    # HYBRID K-MEANS + GA
     # ======================================
-    start = time.time()
+    print("\n[3] HYBRID K-MEANS + GA")
 
-    centroids, best_k = (
-        run_hybrid_clustering()
+    ga_result = evaluate_ga()
+
+    result["hybrid_ga_silhouette"] = (
+        ga_result["silhouette"]
     )
 
-    execution_time = time.time() - start
-
-    labels = predict_cluster(
-        val,
-        centroids
+    result["hybrid_ga_time"] = (
+        ga_result["time"]
     )
 
-    silhouette = silhouette_score(
-        val,
-        labels
+
+    # ======================================
+    # HYBRID K-MEANS + FIREFLY
+    # ======================================
+    print("\n[4] HYBRID K-MEANS + FIREFLY")
+
+    hybrid_firefly_result = (
+        evaluate_hybrid_firefly()
     )
 
-    results[-1][
+    result[
         "hybrid_firefly_silhouette"
-    ] = silhouette
+    ] = (
+        hybrid_firefly_result["silhouette"]
+    )
 
-    results[-1][
+    result[
         "hybrid_firefly_time"
-    ] = execution_time
+    ] = (
+        hybrid_firefly_result["time"]
+    )
 
 
     # ======================================
-    # HYBRID KMEANS + GA
+    # SAVE ITERATION RESULT
     # ======================================
-    start = time.time()
+    results.append(result)
 
-    labels_train, centroids, best_k = (
-        run_ga_clustering()
+    print("\nHASIL ITERASI")
+
+    print(
+        f"K-Means                    : "
+        f"{result['kmeans_silhouette']:.4f}"
     )
 
-    execution_time = time.time() - start
-
-    labels = predict_cluster(
-        val,
-        centroids
+    print(
+        f"Firefly                    : "
+        f"{result['firefly_silhouette']:.4f}"
     )
 
-    silhouette = silhouette_score(
-        val,
-        labels
+    print(
+        f"Hybrid K-Means + GA        : "
+        f"{result['hybrid_ga_silhouette']:.4f}"
     )
 
-    results[-1][
-        "hybrid_ga_silhouette"
-    ] = silhouette
+    print(
+        f"Hybrid K-Means + Firefly   : "
+        f"{result['hybrid_firefly_silhouette']:.4f}"
+    )
 
-    results[-1][
-        "hybrid_ga_time"
-    ] = execution_time
+
+# ==========================================
+# DATAFRAME
+# ==========================================
+df = pd.DataFrame(results)
 
 
 # ==========================================
 # SAVE CSV
 # ==========================================
-df = pd.DataFrame(results)
-
 df.to_csv(
 
     "data/result/parameter_stability.csv",
@@ -186,6 +160,281 @@ df.to_csv(
 
 )
 
+
+# ==========================================
+# SUMMARY
+# ==========================================
+print("\n================================")
+print("PARAMETER STABILITY SUMMARY")
+print("================================")
+
+print("\nRATA-RATA SILHOUETTE")
+
+print(
+    "K-Means                    :",
+    round(
+        df["kmeans_silhouette"].mean(),
+        4
+    )
+)
+
+print(
+    "Firefly                    :",
+    round(
+        df["firefly_silhouette"].mean(),
+        4
+    )
+)
+
+print(
+    "Hybrid K-Means + GA        :",
+    round(
+        df[
+            "hybrid_ga_silhouette"
+        ].mean(),
+        4
+    )
+)
+
+print(
+    "Hybrid K-Means + Firefly   :",
+    round(
+        df[
+            "hybrid_firefly_silhouette"
+        ].mean(),
+        4
+    )
+)
+
+
+# ==========================================
+# EXECUTION TIME
+# ==========================================
+print("\nRATA-RATA EXECUTION TIME")
+
+print(
+    "K-Means                    :",
+    round(
+        df["kmeans_time"].mean(),
+        4
+    )
+)
+
+print(
+    "Firefly                    :",
+    round(
+        df["firefly_time"].mean(),
+        4
+    )
+)
+
+print(
+    "Hybrid K-Means + GA        :",
+    round(
+        df[
+            "hybrid_ga_time"
+        ].mean(),
+        4
+    )
+)
+
+print(
+    "Hybrid K-Means + Firefly   :",
+    round(
+        df[
+            "hybrid_firefly_time"
+        ].mean(),
+        4
+    )
+)
+
+
+# ==========================================
+# STANDARD DEVIATION
+# ==========================================
+print("\nSTANDARD DEVIATION")
+
+print(
+    "K-Means                    :",
+    round(
+        df["kmeans_silhouette"].std(),
+        4
+    )
+)
+
+print(
+    "Firefly                    :",
+    round(
+        df["firefly_silhouette"].std(),
+        4
+    )
+)
+
+print(
+    "Hybrid K-Means + GA        :",
+    round(
+        df[
+            "hybrid_ga_silhouette"
+        ].std(),
+        4
+    )
+)
+
+print(
+    "Hybrid K-Means + Firefly   :",
+    round(
+        df[
+            "hybrid_firefly_silhouette"
+        ].std(),
+        4
+    )
+)
+
+
+# ==========================================
+# BEST METHOD
+# ==========================================
+avg_scores = {
+
+    "K-Means":
+    df["kmeans_silhouette"].mean(),
+
+    "Firefly":
+    df["firefly_silhouette"].mean(),
+
+    "Hybrid K-Means + GA":
+    df[
+        "hybrid_ga_silhouette"
+    ].mean(),
+
+    "Hybrid K-Means + Firefly":
+    df[
+        "hybrid_firefly_silhouette"
+    ].mean()
+
+}
+
+
+best_method = max(
+    avg_scores,
+    key=avg_scores.get
+)
+
+
+# ==========================================
+# MOST STABLE
+# ==========================================
+stability_scores = {
+
+    "K-Means":
+    df["kmeans_silhouette"].std(),
+
+    "Firefly":
+    df["firefly_silhouette"].std(),
+
+    "Hybrid K-Means + GA":
+    df[
+        "hybrid_ga_silhouette"
+    ].std(),
+
+    "Hybrid K-Means + Firefly":
+    df[
+        "hybrid_firefly_silhouette"
+    ].std()
+
+}
+
+
+most_stable = min(
+    stability_scores,
+    key=stability_scores.get
+)
+
+
+# ==========================================
+# FASTEST METHOD
+# ==========================================
+avg_times = {
+
+    "K-Means":
+    df["kmeans_time"].mean(),
+
+    "Firefly":
+    df["firefly_time"].mean(),
+
+    "Hybrid K-Means + GA":
+    df[
+        "hybrid_ga_time"
+    ].mean(),
+
+    "Hybrid K-Means + Firefly":
+    df[
+        "hybrid_firefly_time"
+    ].mean()
+
+}
+
+
+fastest_method = min(
+    avg_times,
+    key=avg_times.get
+)
+
+
+# ==========================================
+# FINAL ANALYSIS
+# ==========================================
+print("\n================================")
+print("HASIL ANALISIS STABILITAS")
+print("================================")
+
+print(
+    "\nBest Silhouette :",
+    best_method
+)
+
+print(
+    "Most Stable     :",
+    most_stable
+)
+
+print(
+    "Fastest Method  :",
+    fastest_method
+)
+
+print("\nKESIMPULAN:")
+
+print(f"""
+
+Berdasarkan pengujian sebanyak
+50 iterasi, metode
+{best_method}
+memiliki rata-rata silhouette
+score terbaik.
+
+Metode yang paling stabil adalah
+{most_stable}
+berdasarkan standard deviation
+terkecil.
+
+Sedangkan metode tercepat adalah
+{fastest_method}
+berdasarkan rata-rata execution
+time terkecil.
+
+Hasil ini menunjukkan bahwa
+Hybrid K-Means + Firefly mampu
+memberikan performa clustering
+yang optimal dan stabil dibanding
+metode lainnya.
+
+""")
+
+
+# ==========================================
+# FILE INFO
+# ==========================================
 print("\n================================")
 print("FILE BERHASIL DISIMPAN")
 print("================================")
