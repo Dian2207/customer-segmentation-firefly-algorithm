@@ -1,7 +1,3 @@
-# ==========================================
-# PARAMETER_STABILITY_COMPARISON.PY
-# ==========================================
-
 import pandas as pd
 import numpy as np
 
