@@ -5,13 +5,12 @@ import pandas as pd
 from sklearn.metrics import silhouette_score
 
 from ml.hybrid_clustering import (
-    run_hybrid_clustering,
-    compute_wcss
+    run_hybrid_clustering
 )
 
-from ml.firefly import run_firefly
-from ml.kmeans import run_kmeans
-
+from comparison.fa_clustering import (
+    run_fa_clustering
+)
 
 # ==================================================
 # PREDICT CLUSTER
@@ -110,105 +109,35 @@ def evaluate_firefly_only():
 
     start_time = time.time()
 
-    # ==============================================
-    # LOAD DATA
-    # ==============================================
-    val = pd.read_csv(
-        "data/processed/validation.csv"
+    labels_train, centroids, best_k, iterations = (
+        run_fa_clustering()
     )
-
-    data = val.values
-
-    results = []
-
-    best_score = -1
-    best_k = 2
-    best_labels = None
-
-    # ==============================================
-    # ITERASI K
-    # ==============================================
-    for k in range(2, 10):
-
-        print(f"\n--- Testing K = {k} ---")
-
-        iter_start = time.time()
-
-        # ==========================================
-        # RUN FIREFLY
-        # ==========================================
-        centroids = run_firefly(
-            data,
-            k
-        )
-
-        # ==========================================
-        # LABEL
-        # ==========================================
-        labels = predict_cluster(
-            data,
-            centroids
-        )
-
-        # ==========================================
-        # SILHOUETTE
-        # ==========================================
-        if len(np.unique(labels)) < 2:
-
-            silhouette = -1
-
-        else:
-
-            silhouette = silhouette_score(
-                data,
-                labels
-            )
-
-        # ==========================================
-        # SSE
-        # ==========================================
-        sse = compute_wcss(
-            data,
-            labels,
-            centroids
-        )
-
-        iter_time = time.time() - iter_start
-
-        print(
-            f"K = {k} | "
-            f"Silhouette = {silhouette:.4f} | "
-            f"SSE = {sse:.2f} | "
-            f"Time = {iter_time:.4f}"
-        )
-
-        results.append({
-
-            "k": k,
-
-            "silhouette": silhouette,
-
-            "sse": sse,
-
-            "time": iter_time
-        })
-
-        # ==========================================
-        # BEST RESULT
-        # ==========================================
-        if silhouette > best_score:
-
-            best_score = silhouette
-
-            best_k = k
-
-            best_labels = labels
 
     end_time = time.time()
 
     execution_time = end_time - start_time
 
-    print("\nSilhouette Score :", best_score)
+    val = pd.read_csv(
+        "data/processed/validation.csv"
+    ).values
+
+    labels = predict_cluster(
+        val,
+        centroids
+    )
+
+    if len(np.unique(labels)) < 2:
+
+        silhouette = -1
+
+    else:
+
+        silhouette = silhouette_score(
+            val,
+            labels
+        )
+
+    print("\nSilhouette Score :", silhouette)
 
     print(
         "Execution Time   :",
@@ -220,15 +149,15 @@ def evaluate_firefly_only():
 
         "method": "Firefly Only",
 
-        "silhouette": best_score,
+        "silhouette": silhouette,
 
         "time": execution_time,
 
         "best_k": best_k,
 
-        "labels": best_labels,
+        "labels": labels,
 
-        "iterations": results
+        "iterations": iterations
     }
 
 
@@ -369,3 +298,10 @@ def run_firefly_comparison():
     )
 
     return comparison
+
+# ==================================================
+# MAIN
+# ==================================================
+if __name__ == "__main__":
+
+    run_firefly_comparison()
