@@ -286,6 +286,12 @@ body{
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="/stability">
+                        Stability
+                    </a>
+                </li>
+
             </ul>
 
         </div>
@@ -357,6 +363,9 @@ body{
         </h2>
 
         <div id="pairplot" class="chart-container"></div>
+        <div id="clusterLegend"
+            class="d-flex flex-wrap gap-3 mt-4">
+        </div>
 
     </div>
 
@@ -388,12 +397,15 @@ body{
                     {% for row in cluster_summary %}
 
                     <tr>
-                        <td>
-                            <span class="badge rounded-pill text-bg-primary px-3 py-2">
-                                Cluster {{ row.Cluster }}
-                            </span>
+                        <td> 
+                            <span
+                            class="badge rounded-pill px-3 py-2 cluster-badge"
+                            data-cluster="{{ row.Cluster }}"
+                        >
+                            Cluster {{ row.Cluster }}
+                        </span>
                         </td>
-
+                         
                         <td>{{ row.Recency }}</td>
                         <td>{{ row.Frequency }}</td>
                         <td>{{ row.Monetary }}</td>
@@ -428,40 +440,100 @@ const frequency = JSON.parse('{{ frequency | tojson | safe }}');
 const monetary  = JSON.parse('{{ monetary | tojson | safe }}');
 const cluster   = JSON.parse('{{ cluster | tojson | safe }}');
 
+const clusterColors = [
+    '#2067d7',
+    '#00b894',
+    '#ff4fd8',
+    '#7c4dff',
+    '#ff8c42',
+    '#00cec9',
+    '#e84393',
+    '#6c5ce7'
+];
+
+const pointColors = cluster.map(c =>
+    clusterColors[c % clusterColors.length]
+);
+
+const uniqueCluster =
+[...new Set(cluster)].sort((a,b) => a-b);
+
+const legendContainer =
+document.getElementById('clusterLegend');
+
+uniqueCluster.forEach((item) => {
+
+    const badge =
+    document.createElement('span');
+
+    badge.className =
+    'badge rounded-pill px-3 py-2';
+
+    badge.style.background =
+    clusterColors[item % clusterColors.length];
+
+    badge.style.color = '#ffffff';
+
+    badge.innerText =
+    `Cluster ${item}`;
+
+    legendContainer.appendChild(badge);
+
+});
+
+document.querySelectorAll('.cluster-badge')
+.forEach(badge => {
+
+    const clusterId =
+    parseInt(badge.dataset.cluster);
+
+    badge.style.background =
+    clusterColors[
+        clusterId % clusterColors.length
+    ];
+
+    badge.style.color = '#ffffff';
+
+});
+
 const data = [{
 
     type: 'splom',
 
     dimensions: [
+
         {
             label:'Recency',
             values: recency
         },
+
         {
             label:'Frequency',
             values: frequency
         },
+
         {
             label:'Monetary',
             values: monetary
         }
+
     ],
 
     text: cluster,
 
     marker: {
-        color: cluster,
-        colorscale: [
-            [0, '#74bcf5'],
-            [0.5, '#3bd8fe'],
-            [1, '#2067d7']
-        ],
-        size: 7,
+
+        color: pointColors,
+
+        size:7,
+
         opacity:0.85,
-        line: {
-            width: 1,
-            color: '#ffffff'
+
+        line:{
+            width:1,
+            color:'#ffffff'
         }
+
     }
 
 }];
@@ -503,7 +575,6 @@ Plotly.newPlot('pairplot', data, layout, {
 
 </script>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
