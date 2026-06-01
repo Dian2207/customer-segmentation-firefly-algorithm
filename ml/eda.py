@@ -8,20 +8,12 @@ def run_eda():
     print("STEP 4 : EXPLORATORY DATA ANALYSIS")
     print("===================================")
 
-    # =========================================
-    # LOAD DATA
-    # =========================================
-
     rfm = pd.read_csv(
         "data/processed/rfm_raw.csv"
     )
 
     print("\nData RFM berhasil dibaca")
     print(rfm.head())
-
-    # =========================================
-    # RECENCY HISTOGRAM
-    # =========================================
 
     recency_bins = [
 
@@ -45,10 +37,6 @@ def run_eda():
 
     )
 
-    # =========================================
-    # LABEL
-    # =========================================
-
     recency_labels = [
 
         "0",
@@ -61,9 +49,6 @@ def run_eda():
         "700",
 
     ]
-    # =========================================
-    # FREQUENCY HISTOGRAM
-    # =========================================
 
     frequency_labels = [
 
@@ -132,93 +117,85 @@ def run_eda():
 
     ]
 
-    # =========================================
-    # MONETARY HISTOGRAM
-    # =========================================
-
     monetary_labels = [
 
         "0-200",
         "201-600",
         "601-1000",
-        "1001-1400",
-        "1401-1800",
-        "1801-2200",
-        "2201-2600",
-        "2601-3000",
-        "3000+"
+        "1001-3000",    # Batang ke-4
+        "3001-5000",
+        "5001-7000",
+        "7001-10000",
+        "10001-15000",
+        "15000+"
 
     ]
 
     monetary_counts = [
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 0) &
-                (rfm['Monetary'] <= 200)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 0) &
+            (rfm['Monetary'] <= 200)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 201) &
-                (rfm['Monetary'] <= 600)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 201) &
+            (rfm['Monetary'] <= 600)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 601) &
-                (rfm['Monetary'] <= 1000)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 601) &
+            (rfm['Monetary'] <= 1000)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 1001) &
-                (rfm['Monetary'] <= 1400)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 1001) &
+            (rfm['Monetary'] <= 3000)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 1401) &
-                (rfm['Monetary'] <= 1800)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 3001) &
+            (rfm['Monetary'] <= 5000)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 1801) &
-                (rfm['Monetary'] <= 2200)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 5001) &
+            (rfm['Monetary'] <= 7000)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 2201) &
-                (rfm['Monetary'] <= 2600)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 7001) &
+            (rfm['Monetary'] <= 10000)
+        ]
+    ),
 
-        len(
-            rfm[
-                (rfm['Monetary'] >= 2601) &
-                (rfm['Monetary'] <= 3000)
-            ]
-        ),
+    len(
+        rfm[
+            (rfm['Monetary'] >= 10001) &
+            (rfm['Monetary'] <= 15000)
+        ]
+    ),
 
-        len(
-            rfm[
-                rfm['Monetary'] > 3000
-            ]
-        )
+    len(
+        rfm[
+            rfm['Monetary'] > 15000
+        ]
+    )
 
-    ]
-
-    # =========================================
-    # CORRELATION MATRIX
-    # =========================================
+]
 
     correlation = rfm[
         ['Recency', 'Frequency', 'Monetary']
@@ -227,51 +204,57 @@ def run_eda():
     print("\nCorrelation Matrix")
     print(correlation)
 
+    total_customer = len(rfm)
+
+    avg_recency = round(
+        rfm['Recency'].mean()
+    )
+
+    avg_frequency = round(
+        rfm['Frequency'].mean()
+    )
+
+    avg_monetary = round(
+        rfm['Monetary'].mean()
+    )
+
     print("\n===================================")
     print("EDA SELESAI")
     print("===================================")
 
-    # =========================================
-    # RETURN DATA
-    # =========================================
-
     return {
 
-        # =====================================
-        # RECENCY
-        # =====================================
+    "total_customer":
+    f"{total_customer:,}".replace(",", "."),
 
-        "recency_labels":
-        recency_labels,
+    "avg_recency":
+    f"{avg_recency} Hari",
 
-        "recency_counts":
-        recency_counts.tolist(),
+    "avg_frequency":
+    f"{avg_frequency} Transaksi",
 
-        # =====================================
-        # FREQUENCY
-        # =====================================
+    "avg_monetary":
+    f"Rp {avg_monetary:,}".replace(",", "."),
 
-        "frequency_labels":
-        frequency_labels,
+    "recency_labels":
+    recency_labels,
 
-        "frequency_counts":
-        frequency_counts,
+    "recency_counts":
+    recency_counts.tolist(),
 
-        # =====================================
-        # MONETARY
-        # =====================================
+    "frequency_labels":
+    frequency_labels,
 
-        "monetary_labels":
-        monetary_labels,
+    "frequency_counts":
+    frequency_counts,
 
-        "monetary_counts":
-        monetary_counts,
+    "monetary_labels":
+    monetary_labels,
 
-        # =====================================
-        # CORRELATION
-        # =====================================
+    "monetary_counts":
+    monetary_counts,
 
-        "correlation":
-        correlation.values.tolist()
+    "correlation":
+    correlation.values.tolist()
 
-    }
+}

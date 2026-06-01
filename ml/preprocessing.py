@@ -11,6 +11,14 @@ def load_and_clean_data():
 
     df = df[~df['Invoice'].astype(str).str.contains('C')]
 
+    df = df[
+        df['Quantity'] > 0
+    ]
+
+    df = df[
+        df['Price'] > 0
+    ]
+
     df.to_csv("data/processed/clean_data.csv", index=False)
 
     print("clean_data.csv berhasil dibuat")

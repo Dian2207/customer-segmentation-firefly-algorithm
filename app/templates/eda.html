@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -201,6 +200,11 @@ body{
     color:var(--primary);
 }
 
+.stats-subtitle{
+    color:#6c757d;
+    font-size:14px;
+    margin-top:6px;
+}
 
 .footer{
     padding:20px 0;
@@ -233,7 +237,6 @@ body{
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg fixed-top">
 
     <div class="container">
@@ -292,7 +295,6 @@ body{
 
 </nav>
 
-<!-- HERO -->
 <section class="hero">
 
     <div class="container">
@@ -319,53 +321,80 @@ body{
 
 </section>
 
-<!-- STATS -->
 <div class="container mb-5">
 
     <div class="row g-4">
 
-        <div class="col-md-4">
+        <div class="col-lg-3 col-md-6">
 
             <div class="stats-card">
 
                 <div class="stats-title">
-                    Total Recency Group
+                    👥 Total Customer
                 </div>
 
                 <div class="stats-value">
-                    {{ recency_labels|length }}
+                    {{ total_customer }}
                 </div>
 
             </div>
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-3 col-md-6">
 
             <div class="stats-card">
 
                 <div class="stats-title">
-                    Total Frequency Group
+                    📅 Average Recency
                 </div>
 
                 <div class="stats-value">
-                    {{ frequency_labels|length }}
+                    {{ avg_recency }}
+                </div>
+
+                <div class="stats-subtitle">
+                    Hari sejak transaksi terakhir
                 </div>
 
             </div>
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-3 col-md-6">
 
             <div class="stats-card">
 
                 <div class="stats-title">
-                    Total Monetary Group
+                    🛒 Average Frequency
                 </div>
 
                 <div class="stats-value">
-                    {{ monetary_labels|length }}
+                    {{ avg_frequency }}
+                </div>
+
+                <div class="stats-subtitle">
+                    Rata-rata transaksi pelanggan
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stats-card">
+
+                <div class="stats-title">
+                    💰 Average Monetary
+                </div>
+
+                <div class="stats-value">
+                    {{ avg_monetary }}
+                </div>
+
+                <div class="stats-subtitle">
+                    Rata-rata total belanja
                 </div>
 
             </div>
@@ -376,7 +405,6 @@ body{
 
 </div>
 
-<!-- RECENCY -->
 <div class="container mb-5">
 
     <div class="glass-card">
@@ -393,7 +421,6 @@ body{
 
 </div>
 
-<!-- FREQUENCY -->
 <div class="container mb-5">
 
     <div class="glass-card">
@@ -410,7 +437,6 @@ body{
 
 </div>
 
-<!-- MONETARY -->
 <div class="container mb-5">
 
     <div class="glass-card">
@@ -427,7 +453,6 @@ body{
 
 </div>
 
-<!-- HEATMAP -->
 <div class="container mb-5">
 
     <div class="glass-card">
@@ -444,7 +469,6 @@ body{
 
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
 
     <div class="container">
@@ -459,10 +483,6 @@ body{
 </footer>
 
 <script>
-
-// =====================================
-// DATA DARI FLASK
-// =====================================
 
 const recencyLabels =
 JSON.parse('{{ recency_labels | tojson | safe }}');
@@ -485,10 +505,6 @@ JSON.parse('{{ monetary_counts | tojson | safe }}');
 const correlationMatrix =
 JSON.parse('{{ correlation | tojson | safe }}');
 
-// =====================================
-// GLOBAL LAYOUT
-// =====================================
-
 const commonLayout = {
 
     paper_bgcolor:'rgba(0,0,0,0)',
@@ -501,16 +517,12 @@ const commonLayout = {
     },
 
     margin:{
-        l:60,
+        l:80,
         r:30,
         t:70,
         b:70
     }
 };
-
-// =====================================
-// RECENCY
-// =====================================
 
 Plotly.newPlot(
 
@@ -528,6 +540,8 @@ Plotly.newPlot(
             text:recencyCounts,
 
             textposition:'outside',
+
+            cliponaxis:false,
 
             marker:{
 
@@ -559,8 +573,10 @@ Plotly.newPlot(
         yaxis:{
 
             title:'Jumlah Customer',
-
-            range:[0,800],
+            
+            automargin:true,
+            
+            range:[0, 1000],
 
             tickmode:'array',
 
@@ -581,10 +597,6 @@ Plotly.newPlot(
     }
 
 );
-
-// =====================================
-// FREQUENCY
-// =====================================
 
 Plotly.newPlot(
 
@@ -635,10 +647,6 @@ Plotly.newPlot(
     }
 
 );
-
-// =====================================
-// MONETARY
-// =====================================
 
 Plotly.newPlot(
 
@@ -691,9 +699,45 @@ Plotly.newPlot(
 
 );
 
-// =====================================
-// HEATMAP
-// =====================================
+let heatmapAnnotations = [];
+
+for(let i = 0; i < correlationMatrix.length; i++){
+
+    for(let j = 0; j < correlationMatrix[i].length; j++){
+
+        heatmapAnnotations.push({
+
+            x: [
+                'Recency',
+                'Frequency',
+                'Monetary'
+            ][j],
+
+            y: [
+                'Recency',
+                'Frequency',
+                'Monetary'
+            ][i],
+
+            text: Number(
+                correlationMatrix[i][j]
+            ).toFixed(2),
+
+            showarrow: false,
+
+            font: {
+
+                size: 12,
+
+                color: 'white'
+
+            }
+
+        });
+
+    }
+
+}
 
 Plotly.newPlot(
 
@@ -723,7 +767,8 @@ Plotly.newPlot(
 
             text:correlationMatrix,
 
-            texttemplate:'%{text}',
+            text: correlationMatrix,
+            texttemplate:'%{text:.2f}',
 
             textfont:{
                 size:16,
@@ -772,6 +817,8 @@ Plotly.newPlot(
             }
         },
 
+        annotations: heatmapAnnotations,
+
         yaxis:{
             autorange:'reversed'
         }
@@ -790,4 +837,3 @@ Plotly.newPlot(
 
 </body>
 </html>
-```

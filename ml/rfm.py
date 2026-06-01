@@ -14,7 +14,7 @@ def create_rfm(df):
 
     rfm = df.groupby('Customer ID').agg({
         'InvoiceDate': lambda x: (NOW - x.max()).days,
-        'Invoice': 'count',
+        'Invoice': 'nunique',
         'TotalPrice': 'sum'
     })
 
