@@ -244,7 +244,6 @@ body{
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg fixed-top">
 
     <div class="container">
@@ -303,7 +302,7 @@ body{
 
 </nav>
 
-<!-- HERO -->
+
 <section class="hero">
 
     <div class="container">
@@ -330,10 +329,6 @@ body{
 
 </section>
 
-
-<!-- =====================================
-     STATS
-===================================== -->
 
 <div class="container mb-5">
 
@@ -404,10 +399,6 @@ body{
 </div>
 
 
-<!-- =====================================
-     SILHOUETTE CHART
-===================================== -->
-
 <div class="container mb-5">
 
     <div class="glass-card">
@@ -428,10 +419,6 @@ body{
 </div>
 
 
-<!-- =====================================
-     EXECUTION TIME CHART
-===================================== -->
-
 <div class="container mb-5">
 
     <div class="glass-card">
@@ -451,10 +438,6 @@ body{
 
 </div>
 
-
-<!-- =====================================
-     ANALYSIS
-===================================== -->
 
 <div class="container mb-5">
 
@@ -477,36 +460,17 @@ body{
 </div>
 
 
-<!-- =====================================
-     FOOTER
-===================================== -->
-
 <footer class="footer">
-
     <div class="container">
-
         <p>
-
             © 2026 Customer Segmentation.
             All rights reserved.
-
         </p>
-
     </div>
-
 </footer>
 
 
-<!-- =====================================
-     JAVASCRIPT
-===================================== -->
-
 <script>
-
-// =====================================
-// DATA FLASK
-// =====================================
-
 const iteration =
 JSON.parse('{{ iterations | tojson | safe }}');
 
@@ -536,10 +500,6 @@ const hybridTime =
 JSON.parse('{{ hybrid_time | tojson | safe }}');
 
 
-// =====================================
-// COMMON LAYOUT
-// =====================================
-
 const commonLayout = {
 
     paper_bgcolor:'rgba(0,0,0,0)',
@@ -560,10 +520,6 @@ const commonLayout = {
 
 };
 
-
-// =====================================
-// SILHOUETTE CHART
-// =====================================
 
 Plotly.newPlot(
 
@@ -672,9 +628,6 @@ Plotly.newPlot(
 );
 
 
-// =====================================
-// EXECUTION TIME CHART
-// =====================================
 
 Plotly.newPlot(
 
