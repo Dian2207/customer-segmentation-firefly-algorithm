@@ -104,8 +104,8 @@ def run_full_evaluation():
             "Monetary"
         ]]
         .mean()
+        .reindex(range(best_k))
         .reset_index()
-        .sort_values("Cluster")
     )
 
     cluster_summary.to_csv(
