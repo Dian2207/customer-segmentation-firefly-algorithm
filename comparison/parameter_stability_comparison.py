@@ -14,16 +14,8 @@ from comparison.evaluate_ga_comparison import (
     evaluate_ga
 )
 
-
-# ==========================================
-# RESULT CONTAINER
-# ==========================================
 results = []
 
-
-# ==========================================
-# ITERASI 50X
-# ==========================================
 for iteration in range(1, 51):
 
     print("\n================================")
@@ -38,10 +30,6 @@ for iteration in range(1, 51):
 
     }
 
-
-    # ======================================
-    # K-MEANS
-    # ======================================
     print("\n[1] K-MEANS")
 
     kmeans_result = evaluate_kmeans()
@@ -54,10 +42,6 @@ for iteration in range(1, 51):
         kmeans_result["time"]
     )
 
-
-    # ======================================
-    # FIREFLY
-    # ======================================
     print("\n[2] FIREFLY")
 
     firefly_result = (
@@ -72,10 +56,6 @@ for iteration in range(1, 51):
         firefly_result["time"]
     )
 
-
-    # ======================================
-    # HYBRID K-MEANS + GA
-    # ======================================
     print("\n[3] HYBRID K-MEANS + GA")
 
     ga_result = evaluate_ga()
@@ -88,10 +68,6 @@ for iteration in range(1, 51):
         ga_result["time"]
     )
 
-
-    # ======================================
-    # HYBRID K-MEANS + FIREFLY
-    # ======================================
     print("\n[4] HYBRID K-MEANS + FIREFLY")
 
     hybrid_firefly_result = (
@@ -110,10 +86,6 @@ for iteration in range(1, 51):
         hybrid_firefly_result["time"]
     )
 
-
-    # ======================================
-    # SAVE ITERATION RESULT
-    # ======================================
     results.append(result)
 
     print("\nHASIL ITERASI")
@@ -138,16 +110,8 @@ for iteration in range(1, 51):
         f"{result['hybrid_firefly_silhouette']:.4f}"
     )
 
-
-# ==========================================
-# DATAFRAME
-# ==========================================
 df = pd.DataFrame(results)
 
-
-# ==========================================
-# SAVE CSV
-# ==========================================
 df.to_csv(
 
     "data/result/parameter_stability.csv",
@@ -156,10 +120,6 @@ df.to_csv(
 
 )
 
-
-# ==========================================
-# SUMMARY
-# ==========================================
 print("\n================================")
 print("PARAMETER STABILITY SUMMARY")
 print("================================")
@@ -202,10 +162,6 @@ print(
     )
 )
 
-
-# ==========================================
-# EXECUTION TIME
-# ==========================================
 print("\nRATA-RATA EXECUTION TIME")
 
 print(
@@ -244,10 +200,6 @@ print(
     )
 )
 
-
-# ==========================================
-# STANDARD DEVIATION
-# ==========================================
 print("\nSTANDARD DEVIATION")
 
 print(
@@ -286,10 +238,6 @@ print(
     )
 )
 
-
-# ==========================================
-# BEST METHOD
-# ==========================================
 avg_scores = {
 
     "K-Means":
@@ -316,10 +264,6 @@ best_method = max(
     key=avg_scores.get
 )
 
-
-# ==========================================
-# MOST STABLE
-# ==========================================
 stability_scores = {
 
     "K-Means":
@@ -346,10 +290,6 @@ most_stable = min(
     key=stability_scores.get
 )
 
-
-# ==========================================
-# FASTEST METHOD
-# ==========================================
 avg_times = {
 
     "K-Means":
@@ -376,10 +316,6 @@ fastest_method = min(
     key=avg_times.get
 )
 
-
-# ==========================================
-# FINAL ANALYSIS
-# ==========================================
 print("\n================================")
 print("HASIL ANALISIS STABILITAS")
 print("================================")
@@ -420,17 +356,13 @@ berdasarkan rata-rata execution
 time terkecil.
 
 Hasil ini menunjukkan bahwa
-Hybrid K-Means + Firefly mampu
+{best_method} mampu
 memberikan performa clustering
 yang optimal dan stabil dibanding
 metode lainnya.
 
 """)
 
-
-# ==========================================
-# FILE INFO
-# ==========================================
 print("\n================================")
 print("FILE BERHASIL DISIMPAN")
 print("================================")
